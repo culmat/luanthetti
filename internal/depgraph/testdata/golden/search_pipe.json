@@ -1,0 +1,12 @@
+[
+  {
+    "package": "mt-mods/pipeworks",
+    "type": "mod",
+    "title": "Pipeworks",
+    "score": 900.0,
+    "downloads": 90000,
+    "provides": [
+      "pipeworks"
+    ]
+  }
+]

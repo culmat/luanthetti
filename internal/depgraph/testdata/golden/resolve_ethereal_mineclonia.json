@@ -1,0 +1,33 @@
+{
+  "target": "TenPlus1/ethereal",
+  "game": "ryvnf/mineclonia",
+  "ok": false,
+  "from_game": [],
+  "install": [],
+  "missing": [
+    {
+      "modname": "default",
+      "needed_by": "TenPlus1/ethereal",
+      "providers": 1,
+      "candidates": [],
+      "only_in_games": [
+        "Luanti/minetest_game"
+      ],
+      "game_providers": 1
+    },
+    {
+      "modname": "stairs",
+      "needed_by": "TenPlus1/ethereal",
+      "providers": 1,
+      "candidates": [],
+      "only_in_games": [
+        "Luanti/minetest_game"
+      ],
+      "game_providers": 1
+    }
+  ],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [],
+  "warnings": []
+}

@@ -1,0 +1,10 @@
+{
+  "modname": "pipeworks",
+  "valid": true,
+  "available": false,
+  "used_by": [
+    "mt-mods/pipeworks"
+  ],
+  "bundled_in_games": [],
+  "policy": "https://content.luanti.org/policy_and_guidance/ (3.1 right to a name, 3.2 forks/drop-in replacements, 3.3 game prefixes)"
+}

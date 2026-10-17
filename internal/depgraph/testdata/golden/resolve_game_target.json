@@ -1,0 +1,20 @@
+{
+  "target": "ryvnf/mineclonia",
+  "game": "Luanti/minetest_game",
+  "ok": true,
+  "from_game": [],
+  "install": [],
+  "missing": [],
+  "shadowed": [
+    {
+      "modname": "player_api",
+      "by": "ryvnf/mineclonia",
+      "note": "replaces the game's own 'player_api' mod"
+    }
+  ],
+  "optional_available": [],
+  "optional_unavailable": [],
+  "warnings": [
+    "The target is a game; games are played, not installed into games."
+  ]
+}

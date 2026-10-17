@@ -1,0 +1,23 @@
+{
+  "target": "other/xcompat",
+  "game": "ryvnf/mineclonia",
+  "ok": false,
+  "from_game": [],
+  "install": [],
+  "missing": [
+    {
+      "modname": "default",
+      "needed_by": "other/xcompat",
+      "providers": 1,
+      "candidates": [],
+      "only_in_games": [
+        "Luanti/minetest_game"
+      ],
+      "game_providers": 1
+    }
+  ],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [],
+  "warnings": []
+}

@@ -1,0 +1,26 @@
+{
+  "target": "someone/cycle_a",
+  "game": "Luanti/minetest_game",
+  "ok": false,
+  "from_game": [],
+  "install": [],
+  "missing": [
+    {
+      "modname": "cycle_b",
+      "needed_by": "someone/cycle_a",
+      "providers": 1,
+      "candidates": [
+        {
+          "package": "someone/cycle_b",
+          "problem": "needs cycle_a, nonexistent, not available in this game"
+        }
+      ],
+      "only_in_games": [],
+      "game_providers": 0
+    }
+  ],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [],
+  "warnings": []
+}

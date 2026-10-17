@@ -1,0 +1,22 @@
+[
+  {
+    "package": "other/xcompat",
+    "type": "mod",
+    "title": "xcompat fork",
+    "score": 1000.0,
+    "downloads": 10,
+    "provides": [
+      "xcompat"
+    ]
+  },
+  {
+    "package": "mt-mods/xcompat",
+    "type": "mod",
+    "title": "xcompat",
+    "score": 500.0,
+    "downloads": 30000,
+    "provides": [
+      "xcompat"
+    ]
+  }
+]

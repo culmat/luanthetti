@@ -1,0 +1,25 @@
+{
+  "target": "mt-mods/pipeworks",
+  "game": "Luanti/minetest_game",
+  "ok": true,
+  "from_game": [
+    "default"
+  ],
+  "install": [
+    {
+      "package": "other/xcompat",
+      "for": [
+        "xcompat"
+      ],
+      "needed_by": "mt-mods/pipeworks",
+      "alternatives": 1
+    }
+  ],
+  "missing": [],
+  "shadowed": [],
+  "optional_available": [
+    "default"
+  ],
+  "optional_unavailable": [],
+  "warnings": []
+}

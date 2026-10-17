@@ -1,0 +1,51 @@
+{
+  "target": "mt-mods/pipeworks",
+  "analyzed_sources": true,
+  "games": [
+    {
+      "game": "Luanti/minetest_game",
+      "title": "Minetest Game",
+      "status": "risky",
+      "missing": [],
+      "install": [
+        "other/xcompat"
+      ],
+      "undeclared_missing": [
+        "core_part (global)",
+        "mcl_core (global)"
+      ],
+      "optional_available": [
+        "default"
+      ],
+      "contentdb_says": null
+    },
+    {
+      "game": "ryvnf/mineclonia",
+      "title": "Mineclonia",
+      "status": "risky",
+      "missing": [],
+      "install": [
+        "mt-mods/xcompat"
+      ],
+      "undeclared_missing": [
+        "core_part (global)"
+      ],
+      "optional_available": [],
+      "contentdb_says": null
+    },
+    {
+      "game": "Wuzzy/mineclone2",
+      "title": "VoxeLibre",
+      "status": "unsatisfiable",
+      "missing": [
+        "xcompat"
+      ],
+      "install": [],
+      "undeclared_missing": [
+        "core_part (global)"
+      ],
+      "optional_available": [],
+      "contentdb_says": null
+    }
+  ]
+}

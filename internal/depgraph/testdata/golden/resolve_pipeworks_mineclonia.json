@@ -1,0 +1,23 @@
+{
+  "target": "mt-mods/pipeworks",
+  "game": "ryvnf/mineclonia",
+  "ok": true,
+  "from_game": [],
+  "install": [
+    {
+      "package": "mt-mods/xcompat",
+      "for": [
+        "xcompat"
+      ],
+      "needed_by": "mt-mods/pipeworks",
+      "alternatives": 1
+    }
+  ],
+  "missing": [],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [
+    "default"
+  ],
+  "warnings": []
+}

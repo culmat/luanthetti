@@ -1,0 +1,42 @@
+{
+  "target": "someone/cycle_a",
+  "analyzed_sources": false,
+  "games": [
+    {
+      "game": "Luanti/minetest_game",
+      "title": "Minetest Game",
+      "status": "unsatisfiable",
+      "missing": [
+        "cycle_b"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    },
+    {
+      "game": "ryvnf/mineclonia",
+      "title": "Mineclonia",
+      "status": "unsatisfiable",
+      "missing": [
+        "cycle_b"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    },
+    {
+      "game": "Wuzzy/mineclone2",
+      "title": "VoxeLibre",
+      "status": "unsatisfiable",
+      "missing": [
+        "cycle_b"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    }
+  ]
+}

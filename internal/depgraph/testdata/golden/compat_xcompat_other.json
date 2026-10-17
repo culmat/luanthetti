@@ -1,0 +1,43 @@
+{
+  "target": "other/xcompat",
+  "analyzed_sources": false,
+  "games": [
+    {
+      "game": "Luanti/minetest_game",
+      "title": "Minetest Game",
+      "status": "ok",
+      "missing": [],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    },
+    {
+      "game": "ryvnf/mineclonia",
+      "title": "Mineclonia",
+      "status": "unsatisfiable",
+      "missing": [
+        "default"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": {
+        "supports": false,
+        "confidence": 11
+      }
+    },
+    {
+      "game": "Wuzzy/mineclone2",
+      "title": "VoxeLibre",
+      "status": "unsatisfiable",
+      "missing": [
+        "default"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    }
+  ]
+}

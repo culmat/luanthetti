@@ -1,0 +1,48 @@
+{
+  "target": "mt-mods/xcompat",
+  "analyzed_sources": false,
+  "games": [
+    {
+      "game": "Luanti/minetest_game",
+      "title": "Minetest Game",
+      "status": "ok",
+      "missing": [],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [
+        "default"
+      ],
+      "contentdb_says": {
+        "supports": true,
+        "confidence": 10
+      }
+    },
+    {
+      "game": "ryvnf/mineclonia",
+      "title": "Mineclonia",
+      "status": "ok",
+      "missing": [],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [
+        "mcl_core"
+      ],
+      "contentdb_says": {
+        "supports": true,
+        "confidence": 10
+      }
+    },
+    {
+      "game": "Wuzzy/mineclone2",
+      "title": "VoxeLibre",
+      "status": "ok",
+      "missing": [],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [
+        "mcl_core"
+      ],
+      "contentdb_says": null
+    }
+  ]
+}

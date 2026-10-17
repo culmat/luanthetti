@@ -1,0 +1,15 @@
+{
+  "modname": "default",
+  "count": 1,
+  "mods": [],
+  "games": [
+    {
+      "package": "Luanti/minetest_game",
+      "type": "game",
+      "title": "Minetest Game",
+      "score": 13000.0,
+      "downloads": 1000000
+    }
+  ],
+  "note": null
+}

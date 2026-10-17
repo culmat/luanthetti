@@ -1,0 +1,15 @@
+{
+  "target": "TenPlus1/ethereal",
+  "game": "Luanti/minetest_game",
+  "ok": true,
+  "from_game": [
+    "default",
+    "stairs"
+  ],
+  "install": [],
+  "missing": [],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [],
+  "warnings": []
+}

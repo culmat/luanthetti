@@ -1,0 +1,45 @@
+{
+  "target": "TenPlus1/ethereal",
+  "analyzed_sources": false,
+  "games": [
+    {
+      "game": "Luanti/minetest_game",
+      "title": "Minetest Game",
+      "status": "ok",
+      "missing": [],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": {
+        "supports": true,
+        "confidence": 1
+      }
+    },
+    {
+      "game": "ryvnf/mineclonia",
+      "title": "Mineclonia",
+      "status": "unsatisfiable",
+      "missing": [
+        "default",
+        "stairs"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    },
+    {
+      "game": "Wuzzy/mineclone2",
+      "title": "VoxeLibre",
+      "status": "unsatisfiable",
+      "missing": [
+        "default",
+        "stairs"
+      ],
+      "install": [],
+      "undeclared_missing": [],
+      "optional_available": [],
+      "contentdb_says": null
+    }
+  ]
+}

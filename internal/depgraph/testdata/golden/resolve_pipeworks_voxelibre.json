@@ -1,0 +1,32 @@
+{
+  "target": "mt-mods/pipeworks",
+  "game": "Wuzzy/mineclone2",
+  "ok": false,
+  "from_game": [],
+  "install": [],
+  "missing": [
+    {
+      "modname": "xcompat",
+      "needed_by": "mt-mods/pipeworks",
+      "providers": 2,
+      "candidates": [
+        {
+          "package": "other/xcompat",
+          "problem": "needs default, not available in this game"
+        },
+        {
+          "package": "mt-mods/xcompat",
+          "problem": "dependency cycle"
+        }
+      ],
+      "only_in_games": [],
+      "game_providers": 0
+    }
+  ],
+  "shadowed": [],
+  "optional_available": [],
+  "optional_unavailable": [
+    "default"
+  ],
+  "warnings": []
+}
