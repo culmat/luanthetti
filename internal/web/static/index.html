@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luanthetti</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script type="module" src="app.js"></script>
+</head>
+<body>
+<header class="top">
+  <h1 class="brand"><img src="icon.svg" alt="" class="logo">Luanthetti</h1>
+  <nav class="tabs" id="tabs">
+    <a href="#/search" data-tab="search">Search</a>
+    <a href="#/installed" data-tab="installed">Installed</a>
+    <a href="#/updates" data-tab="updates">Updates</a>
+    <a href="#/installs" data-tab="installs">Installations</a>
+  </nav>
+  <button class="jobs-toggle" id="jobs-toggle" type="button" aria-expanded="false">Jobs <span id="jobs-count" class="count"></span></button>
+</header>
+<div id="banner" class="banner" hidden></div>
+<main id="view" class="view"></main>
+<aside id="jobs" class="jobs" hidden aria-label="Jobs"></aside>
+<div id="modal" class="modal" hidden><div class="modal-box" role="dialog" aria-modal="true"></div></div>
+<noscript>Luanthetti's UI needs JavaScript.</noscript>
+</body>
+</html>

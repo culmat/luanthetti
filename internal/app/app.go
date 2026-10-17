@@ -292,3 +292,28 @@ func sortedKeys[V any](m map[string]V) []string {
 	sort.Strings(out)
 	return out
 }
+
+// SetLog replaces the log function everywhere (the web UI routes logs to the running job).
+func (a *App) SetLog(fn func(format string, args ...any)) {
+	a.Log, a.Library.Log, a.Snap.Log = fn, fn, fn
+}
+
+// Tags returns ContentDB's tag list, cached for a day.
+func (a *App) Tags(ctx context.Context) ([]contentdb.Tag, error) {
+	if data, fetched, err := a.Store.CachedBlob("tags"); err == nil && (a.Offline || time.Since(fetched) < 24*time.Hour) {
+		var tags []contentdb.Tag
+		if json.Unmarshal(data, &tags) == nil {
+			return tags, nil
+		}
+	}
+	if a.Offline {
+		return []contentdb.Tag{}, nil
+	}
+	tags, err := a.CDB.Tags(ctx)
+	if err != nil {
+		return nil, err
+	}
+	data, _ := json.Marshal(tags)
+	_ = a.Store.PutCachedBlob("tags", data)
+	return tags, nil
+}
