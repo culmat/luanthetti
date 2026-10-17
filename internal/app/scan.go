@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/culmat/luanthetti/internal/depgraph"
 	"github.com/culmat/luanthetti/internal/fsutil"
 	"github.com/culmat/luanthetti/internal/library"
 	"github.com/culmat/luanthetti/internal/linker"
@@ -183,8 +184,15 @@ func (a *App) Adopt(ctx context.Context, req AdoptRequest) (*AdoptReport, error)
 			typ := map[string]string{"mod": "mod", "modpack": "mod", "game": "game", "txp": "txp"}[r.FolderType]
 			author, name := r.Author, r.Name
 			if idxErr == nil {
-				// Use ContentDB's spelling of the author and the package name.
-				if p, err := idx.Package(author + "/" + name); err == nil {
+				// Use ContentDB's spelling of the author and the package name. A game's folder is
+				// its game id, which may differ from the package name (minetest vs minetest_game).
+				var p *depgraph.Pkg
+				if r.FolderType == "game" {
+					p = idx.GameForInstalled(r.Name, r.Author, "")
+				} else if found, err := idx.Package(author + "/" + name); err == nil {
+					p = found
+				}
+				if p != nil && strings.EqualFold(p.Author, author) {
 					author, name, typ = p.Author, p.Name, p.Type
 					item.Package = p.Key()
 				}

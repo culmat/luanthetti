@@ -24,12 +24,14 @@ type globals struct {
 	verbose  bool
 	yes      bool
 	dryRun   bool
+	offline  bool
 	out, err io.Writer
+	in       io.Reader
 }
 
 // Main runs the command line and returns the process exit code.
 func Main(args []string, stdout, stderr io.Writer) int {
-	g := &globals{out: stdout, err: stderr}
+	g := &globals{out: stdout, err: stderr, in: os.Stdin}
 	root := newRoot(g)
 	root.SetArgs(args)
 	root.SetOut(stdout)
@@ -71,10 +73,17 @@ installation you register. luanti-depgraph tells it in which games a package wor
 	pf.BoolVarP(&g.verbose, "verbose", "v", false, "more output on stderr")
 	pf.BoolVarP(&g.yes, "yes", "y", false, "answer yes to confirmations")
 	pf.BoolVarP(&g.dryRun, "dry-run", "n", false, "show what would be done without changing anything")
+	pf.BoolVar(&g.offline, "offline", os.Getenv("LUANTHETTI_OFFLINE") == "1", "use only cached data; no network")
 
 	root.AddCommand(newVersionCmd(g))
+	for _, add := range commands {
+		root.AddCommand(add(g))
+	}
 	return root
 }
+
+// commands registers the subcommands defined in the other files of this package.
+var commands []func(*globals) *cobra.Command
 
 // wrapArgs turns cobra's argument-count errors into usage errors.
 func wrapArgs(v cobra.PositionalArgs) cobra.PositionalArgs {

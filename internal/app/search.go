@@ -36,9 +36,9 @@ func (a *App) Search(ctx context.Context, q SearchQuery) (*SearchReport, error) 
 		cutoff = time.Now().Add(-q.UpdatedWithin)
 	}
 	type scored struct {
-		hit   SearchHit
-		exact bool
-		date  string
+		hit  SearchHit
+		tier int // 0 package named like the query, 1 a mod providing it, 2 a game providing it, 3 text match
+		date string
 	}
 	var all []scored
 	for _, p := range idx.All() {
@@ -49,11 +49,17 @@ func (a *App) Search(ctx context.Context, q SearchQuery) (*SearchReport, error) 
 			continue // games are not "compatible with" games
 		}
 		d := idx.Details(p)
-		exact := false
+		tier := 3
 		if needle != "" {
 			hay := strings.ToLower(p.Key() + " " + p.Title + " " + d.ShortDescription)
-			exact = needle == p.Name || p.Provides.Has(needle)
-			if !exact && !strings.Contains(hay, needle) {
+			switch {
+			case needle == strings.ToLower(p.Name):
+				tier = 0
+			case p.Provides.Has(needle) && p.Type != "game":
+				tier = 1
+			case p.Provides.Has(needle):
+				tier = 2
+			case !strings.Contains(hay, needle):
 				continue
 			}
 		}
@@ -86,11 +92,11 @@ func (a *App) Search(ctx context.Context, q SearchQuery) (*SearchReport, error) 
 				continue
 			}
 		}
-		all = append(all, scored{hit: hit, exact: exact, date: d.LatestReleaseAt})
+		all = append(all, scored{hit: hit, tier: tier, date: d.LatestReleaseAt})
 	}
 	sort.SliceStable(all, func(i, j int) bool {
-		if all[i].exact != all[j].exact {
-			return all[i].exact
+		if all[i].tier != all[j].tier {
+			return all[i].tier < all[j].tier
 		}
 		switch q.Sort {
 		case "downloads":

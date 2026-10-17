@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"strings"
 	"testing"
+	"time"
 )
 
 func run(t *testing.T, args ...string) (int, string, string) {
@@ -31,6 +32,21 @@ func TestUsageErrorsExit2(t *testing.T) {
 		code, _, errOut := run(t, args...)
 		if code != ExitUsage {
 			t.Errorf("%v: code=%d stderr=%q", args, code, errOut)
+		}
+	}
+}
+
+func TestParseWithin(t *testing.T) {
+	day := 24 * time.Hour
+	for in, want := range map[string]time.Duration{"6m": 180 * day, "90d": 90 * day, "2w": 14 * day, "1y": 365 * day, "48h": 48 * time.Hour} {
+		got, err := parseWithin(in)
+		if err != nil || got != want {
+			t.Errorf("%s: %v %v", in, got, err)
+		}
+	}
+	for _, bad := range []string{"m", "xd", "-3d", "5q"} {
+		if _, err := parseWithin(bad); err == nil {
+			t.Errorf("%s accepted", bad)
 		}
 	}
 }

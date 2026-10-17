@@ -54,7 +54,6 @@ func (a *App) Remove(ctx context.Context, req RemoveRequest) (*RemoveReport, err
 				return rep, err
 			}
 			touched[p.ID] = true
-			a.warnWorlds(inst, l, p, rep)
 		}
 		// Dependencies that nothing in this installation requires any more.
 		for changed := true; changed; {
@@ -109,6 +108,7 @@ func (a *App) Remove(ctx context.Context, req RemoveRequest) (*RemoveReport, err
 
 func (a *App) unlink(inst store.Installation, l store.Link, p store.Package, dryRun bool, rep *RemoveReport) error {
 	rep.Removed = append(rep.Removed, RemovedLink{Installation: inst.Name, Package: p.Author + "/" + p.Name, Path: l.Path, Reason: l.Reason})
+	a.warnWorlds(inst, l, p, rep)
 	if dryRun {
 		return nil
 	}
