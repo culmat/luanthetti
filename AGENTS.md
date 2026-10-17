@@ -19,7 +19,7 @@ Luanthetti is a Go CLI plus embedded web UI that keeps Luanti content (mods, gam
 
 ## Conventions
 
-- **Go 1.24+, `CGO_ENABLED=0`.** Pure-Go SQLite (`modernc.org/sqlite`). The binary must build for linux/darwin/windows × amd64/arm64 with `go build` alone.
+- **Go 1.26+, `CGO_ENABLED=0`.** Pure-Go SQLite (`modernc.org/sqlite`). The binary must build for linux/darwin/windows × amd64/arm64 with `go build` alone.
 - **`gofmt`, `go vet`, `staticcheck` clean.** Tests: `go test ./...` on all three OSes (CI).
 - **Every command has `--json`** and prints the same struct the web API serves (`internal/app/report.go`). Exit codes: 0 ok, 1 error, 2 usage.
 - **Facts about engine behaviour must be verified** against the engine source or docs (`~/.avanti/corpus/engine/doc/`, `builtin/mainmenu/content/`) before they go into code comments or docs. Cite the file.
