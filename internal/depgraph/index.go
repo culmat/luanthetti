@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"sync"
 
 	_ "modernc.org/sqlite" // database/sql driver "sqlite"
 )
@@ -59,6 +60,30 @@ type Index struct {
 	// present. Tests turn it off to exercise the port.
 	UsePrecomputed bool
 	pre            *precomputed
+
+	detailsOnce sync.Once
+	details     map[int64]Details
+	hasTags     bool
+	mu          sync.Mutex // guards resolvers
+	indepMu     sync.Mutex // guards independent
+	resolvers   map[int64]*Resolver
+}
+
+// ResolverFor returns a shared, memoising resolver for a game. Safe for concurrent use of
+// different games; callers resolving in the same game concurrently must serialise themselves
+// (the app layer runs one operation at a time).
+func (idx *Index) ResolverFor(game *Pkg) *Resolver {
+	idx.mu.Lock()
+	defer idx.mu.Unlock()
+	if idx.resolvers == nil {
+		idx.resolvers = map[int64]*Resolver{}
+	}
+	r := idx.resolvers[game.ID]
+	if r == nil {
+		r = NewResolver(idx, game)
+		idx.resolvers[game.ID] = r
+	}
+	return r
 }
 
 // Open opens a snapshot read-only and loads the index.
@@ -373,12 +398,17 @@ func (idx *Index) Providers(modname string) []*Pkg {
 // GameIndependent reports whether the package's hard dependencies can be met by standalone
 // mods alone (resolved against a game that provides nothing, ignoring declared support).
 func (idx *Index) GameIndependent(pkg *Pkg) bool {
-	if v, ok := idx.independent[pkg.ID]; ok {
+	idx.indepMu.Lock()
+	v, ok := idx.independent[pkg.ID]
+	idx.indepMu.Unlock()
+	if ok {
 		return v
 	}
 	nowhere := &Pkg{ID: -1, Type: "game", Provides: Set{}, Depends: Set{}, Optional: Set{}}
 	r := newResolver(idx, nowhere, false)
-	ok, _ := r.satisfiable(pkg, nil)
+	ok, _ = r.satisfiable(pkg, nil)
+	idx.indepMu.Lock()
 	idx.independent[pkg.ID] = ok
+	idx.indepMu.Unlock()
 	return ok
 }

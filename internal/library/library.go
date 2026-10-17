@@ -238,7 +238,12 @@ func (l *Library) AddLocal(path string) (store.Package, store.Version, error) {
 		}
 	}
 	defer os.RemoveAll(tmp)
-	src := filepath.Join(tmp, "src")
+	// Keep the original folder (or zip) name: a mod without mod.conf is named after its folder.
+	base := strings.TrimSuffix(filepath.Base(filepath.Clean(path)), filepath.Ext(path))
+	if st.IsDir() {
+		base = filepath.Base(filepath.Clean(path))
+	}
+	src := filepath.Join(tmp, base)
 	if st.IsDir() {
 		err = fsutil.CopyDir(path, src)
 	} else {
