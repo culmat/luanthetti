@@ -117,6 +117,13 @@ Find Luanti installations on this machine.
 | `--add` | register the installations found |
 
 
+## installs games
+
+List the games of an installation and how they map to ContentDB.
+
+    luanthetti installs games <name>
+
+
 ## installs list
 
 List registered installations and their games.

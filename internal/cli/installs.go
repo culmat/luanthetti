@@ -138,6 +138,39 @@ func newInstallsCmd(g *globals) *cobra.Command {
 		},
 	}
 	remove.Flags().BoolVar(&unlink, "unlink", false, "remove every link Luanthetti placed in it first")
-	cmd.AddCommand(detect, addCmd, list, remove)
+	games := &cobra.Command{
+		Use:   "games <name>",
+		Short: "List the games of an installation and how they map to ContentDB",
+		Args:  wrapArgs(cobra.ExactArgs(1)),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			return g.withApp(func(a *app.App) error {
+				views, err := a.ListInstalls(cmd.Context())
+				if err != nil {
+					return err
+				}
+				for _, v := range views {
+					if v.Name != args[0] {
+						continue
+					}
+					out := struct {
+						Games   []app.GameRef `json:"games"`
+						Unknown []app.GameRef `json:"unknown_games"`
+					}{v.Games, v.UnknownGames}
+					return g.emit(out, func(w io.Writer) {
+						var rows [][]string
+						for _, gm := range v.Games {
+							rows = append(rows, []string{gm.ID, gm.Key, dash(gm.Title)})
+						}
+						for _, gm := range v.UnknownGames {
+							rows = append(rows, []string{gm.ID, "(not on ContentDB)", dash(gm.Title)})
+						}
+						table(w, "GAME ID\tCONTENTDB\tTITLE", rows)
+					})
+				}
+				return fmt.Errorf("no installation %q", args[0])
+			})
+		},
+	}
+	cmd.AddCommand(detect, addCmd, list, remove, games)
 	return cmd
 }
