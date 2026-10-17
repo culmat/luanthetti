@@ -59,7 +59,7 @@ func TestCLIDocsUpToDate(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if buf.String() != string(want) {
+	if buf.String() != strings.ReplaceAll(string(want), "\r\n", "\n") {
 		t.Error("docs/cli.md is out of date; run `go run ./tools/gendocs > docs/cli.md`")
 	}
 }
