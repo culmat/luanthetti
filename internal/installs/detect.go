@@ -113,9 +113,7 @@ func FindBinaries(ctx context.Context) []Binary {
 		}
 	}
 	if runtime.GOOS == "darwin" {
-		for _, app := range []string{"/Applications/Luanti.app/Contents/MacOS/luanti", "/Applications/Minetest.app/Contents/MacOS/minetest"} {
-			paths = append(paths, app)
-		}
+		paths = append(paths, "/Applications/Luanti.app/Contents/MacOS/luanti", "/Applications/Minetest.app/Contents/MacOS/minetest")
 		if home, err := os.UserHomeDir(); err == nil {
 			paths = append(paths, filepath.Join(home, "Applications", "Luanti.app", "Contents", "MacOS", "luanti"))
 		}
