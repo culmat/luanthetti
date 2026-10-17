@@ -10,6 +10,7 @@ import (
 	"io/fs"
 	"os"
 	"path/filepath"
+	"runtime"
 
 	"github.com/culmat/luanthetti/internal/fsutil"
 )
@@ -87,9 +88,9 @@ func Link(target, path, mode string) (string, error) {
 	case Junction:
 		return Junction, makeJunction(target, path)
 	case Auto, "":
-		// Auto never picks a junction: tools that delete a package folder with a recursive
-		// delete that follows junctions (possible with some C++ standard libraries on
-		// Windows) would empty the library. Junctions are used only when asked for.
+		if !autoLinks() {
+			return Copy, fsutil.CopyDir(target, path)
+		}
 		if err := os.Symlink(target, path); err == nil {
 			return Symlink, nil
 		}
@@ -179,9 +180,20 @@ func Unlink(root, path, kind string) error {
 	return fmt.Errorf("unknown link kind %q", kind)
 }
 
-// Probe finds the best link kind that works in dir by trying it: symlink, else copy (see Link
-// for why auto mode never picks a junction).
+// autoLinks reports whether auto mode may link at all. On Windows it copies: Luanti 5.17 and
+// older delete a package folder (in-game update or uninstall) with a recursive delete that
+// follows symlinks and junctions (src/filesys.cpp RecursiveDelete: IsDir, GetDirListing,
+// DeleteFile on the target's files), which would empty the library's copy. The engine's
+// std::filesystem rewrite (luanti-org/luanti#17537, 2026-09-13) removes links without
+// following them; until a release with it is common, Windows links are opt-in.
+func autoLinks() bool { return runtime.GOOS != "windows" }
+
+// Probe finds the best link kind that works in dir by trying it: symlink (not on Windows, see
+// autoLinks), else copy. Junctions are never chosen automatically.
 func Probe(dir string) string {
+	if !autoLinks() {
+		return Copy
+	}
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return Copy
 	}

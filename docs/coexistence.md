@@ -33,19 +33,17 @@ package as if it were a normal folder. This was checked with a headless Luanti 5
 which loaded mods linked this way.
 
 Where symbolic links are not available, Luanthetti copies the release instead and records the
-copy. That happens on Windows without developer mode or administrator rights, and on some
-network file systems.
-
-`luanthetti installs add --link-mode junction` uses NTFS directory junctions on Windows. Automatic
-mode never picks them; see [the Windows note](#windows-junctions).
+copy. That happens on some network file systems, and **on Windows always, unless you ask for
+links**; see [Windows](#windows).
 
 ## When another tool updates a linked package
 
 The content browser updates a package by deleting its folder and copying the new release into
 the same place (`pkgmgr.install_dir`: `core.delete_dir(targetpath)`, then `core.copy_dir`).
-Since 5.10 or so, `core.delete_dir` uses `std::filesystem::remove_all`, which removes a symbolic
-link without following it. The library is untouched, and the installation ends up with a real
-folder holding the newer release. luma's update replaces the folder in the same way.
+On Linux and macOS, Luanti 5.17 deletes with `rm -rf <path>`, which removes a symbolic link
+without following it (`src/filesys.cpp`, `RecursiveDelete`). The library is untouched, and the
+installation ends up with a real folder holding the newer release. luma's update replaces the
+folder in the same way; Go's `os.RemoveAll` does not follow links either.
 
 Luanthetti notices this:
 
@@ -65,8 +63,9 @@ delete a real folder recorded as a link, and never deletes anything outside the 
 Folders that other tools installed are not Luanthetti's to remove; adopt them first if you want
 Luanthetti to manage them.
 
-The content browser's own "Uninstall" on a linked package deletes the link only. Luanthetti then
-reports the link as **missing**. `repair --relink` puts it back, or `remove` forgets it.
+On Linux and macOS, the content browser's own "Uninstall" on a linked package deletes the link
+only. Luanthetti then reports the link as **missing**. `repair --relink` puts it back, or
+`remove` forgets it.
 
 ## Worlds
 
@@ -75,16 +74,23 @@ edit `world.mt`. The main menu's "Configure" dialog does, and luma plans to. Whe
 package that a world still enables, Luanthetti names the world, because Luanti will report
 the mod as missing.
 
-## Windows junctions
+## Windows
 
-On Windows, a directory junction is a link that needs no special rights. Whether a recursive
-delete follows a junction depends on the C++ standard library the engine was built with. If one
-does, the content browser updating a junction-linked package would empty that release's folder
-in the library. Automatic mode therefore uses a symbolic link, or else a copy.
+Luanti 5.17.0 and older delete a folder on Windows by listing it and deleting every file inside,
+following symbolic links and junctions (`src/filesys.cpp`, Windows `RecursiveDelete`: `IsDir`,
+`GetDirListing`, `DeleteFile`). An in-game update or uninstall of a linked package would
+therefore empty the release in Luanthetti's library, not just remove the link. The engine
+replaced this with `std::filesystem::remove_all` on 2026-09-13
+([luanti-org/luanti#17537](https://github.com/luanti-org/luanti/pull/17537)), which is not in
+5.17.0.
 
-Choose `--link-mode junction` only for installations that no other tool updates, such as a
-server managed only by Luanthetti. `luanthetti verify` reports a library folder that went
-missing; reinstalling the package restores it.
+So on Windows, Luanthetti copies releases into installations by default. Copies still come from
+the one library, update together and can be rolled back; they only use more disk space. Choose
+`installs add --link-mode symlink` (needs developer mode or administrator rights) or
+`--link-mode junction` only for installations whose packages no other tool updates or
+uninstalls, such as a server managed by Luanthetti alone, or once you run a Luanti release with
+the fix. `luanthetti verify` reports a library release that went missing; reinstalling the
+package restores it.
 
 ## Servers without links
 

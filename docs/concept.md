@@ -45,7 +45,7 @@ installation "server"   /srv/luanti/
 
 Principles:
 
-1. **Install once, link everywhere.** A package release lives once in the library. Each registered installation gets a symbolic link (a copy where links are not possible) in `mods/`, `games/` or `textures/`. Windows junctions are available on request only; see [coexistence.md](coexistence.md#windows-junctions).
+1. **Install once, link everywhere.** A package release lives once in the library. Each registered installation gets a symbolic link (a copy where links are not possible, and on Windows by default) in `mods/`, `games/` or `textures/`. See [coexistence.md](coexistence.md#windows) for why.
 2. **Installations, not games, are the targets.** `install author/name` links into every registered installation by default, `--into` restricts it. Which games a package works in is a per-game status that Luanthetti shows and uses to pick dependencies, not an install location.
 3. **Per-world control stays in `world.mt`.** Luanthetti does not reinvent it; luma's roadmap covers editing it.
 4. **Interoperable by construction.** Luanthetti writes `author`, `name`, `release` (and `title`, `description` when absent) into the `.conf` exactly as the in-game installer does. Luanti, luma and Luanthetti recognise each other's installs. `scan` reports when another tool replaced a link with a real folder.

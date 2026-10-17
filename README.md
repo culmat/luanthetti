@@ -55,7 +55,7 @@ See [docs/cli.md](docs/cli.md) for every command and flag, and [docs/concept.md]
 
 ## How it works
 
-- **Library:** every package release is stored once under the Luanthetti data directory. Installations get a symbolic link (a copy where links are not possible) in their `mods/`, `games/` or `textures/` folder. Luanti loads linked packages like normal folders.
+- **Library:** every package release is stored once under the Luanthetti data directory. Installations get a symbolic link in their `mods/`, `games/` or `textures/` folder (a copy on Windows, where Luanti 5.17's in-game updater would delete through a link; see [docs/coexistence.md](docs/coexistence.md#windows)). Luanti loads linked packages like normal folders.
 - **Compatibility:** the nightly luanti-depgraph snapshot (a few MB, downloaded at most once a day) carries ContentDB metadata plus the resolution of every package against the most-played games. Luanthetti reads that and resolves the rest itself with the same rules.
 - **Updates:** compare the `release` recorded in each package's `.conf` with ContentDB's `/api/updates/`, like the in-game updater. Previous versions stay in the library for `rollback`; `pin` holds a package in one installation.
 - **Scan and adopt:** anything in an installation with `author` and `release` in its conf can be moved into the library and replaced with a link. Everything else is left alone.

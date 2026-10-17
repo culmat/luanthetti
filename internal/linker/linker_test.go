@@ -41,6 +41,9 @@ func TestLinkReplaceUnlink(t *testing.T) {
 			if mode == Auto && kind == Junction {
 				t.Error("auto mode must never pick a junction")
 			}
+			if mode == Auto && runtime.GOOS == "windows" && kind != Copy {
+				t.Errorf("auto mode on Windows must copy, got %s", kind)
+			}
 			if b, _ := os.ReadFile(filepath.Join(path, "init.lua")); string(b) != "one" {
 				t.Fatalf("content %q", b)
 			}
