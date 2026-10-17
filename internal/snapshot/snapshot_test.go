@@ -137,9 +137,11 @@ func TestOfflineAndFailures(t *testing.T) {
 		t.Fatalf("offline without file: %v", err)
 	}
 	m.Offline = false
-	if _, _, _, err := m.Ensure(ctx); err != nil {
+	idx, _, _, err := m.Ensure(ctx)
+	if err != nil {
 		t.Fatal(err)
 	}
+	idx.Close() // Windows can't delete or replace an open file
 	// Server gone: Refresh keeps the file and reports a note instead of failing.
 	s.Close()
 	res, err := m.Refresh(ctx, true)
@@ -156,8 +158,10 @@ func TestOfflineAndFailures(t *testing.T) {
 	if err != nil || res.Downloaded || res.Note == "" {
 		t.Errorf("corrupt: %+v %v", res, err)
 	}
-	if _, _, _, err := Open(m.Path()); err != nil {
+	if idx, _, _, err := Open(m.Path()); err != nil {
 		t.Errorf("good file damaged: %v", err)
+	} else {
+		idx.Close()
 	}
 	if _, err := os.Stat(m.Path() + ".download"); err == nil {
 		t.Error("temp file left behind")
