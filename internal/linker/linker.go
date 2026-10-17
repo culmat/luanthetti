@@ -87,11 +87,11 @@ func Link(target, path, mode string) (string, error) {
 	case Junction:
 		return Junction, makeJunction(target, path)
 	case Auto, "":
+		// Auto never picks a junction: tools that delete a package folder with a recursive
+		// delete that follows junctions (possible with some C++ standard libraries on
+		// Windows) would empty the library. Junctions are used only when asked for.
 		if err := os.Symlink(target, path); err == nil {
 			return Symlink, nil
-		}
-		if err := makeJunction(target, path); err == nil {
-			return Junction, nil
 		}
 		return Copy, fsutil.CopyDir(target, path)
 	}
@@ -179,7 +179,8 @@ func Unlink(root, path, kind string) error {
 	return fmt.Errorf("unknown link kind %q", kind)
 }
 
-// Probe finds the best link kind that works in dir by trying it.
+// Probe finds the best link kind that works in dir by trying it: symlink, else copy (see Link
+// for why auto mode never picks a junction).
 func Probe(dir string) string {
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return Copy
@@ -193,9 +194,6 @@ func Probe(dir string) string {
 	defer os.Remove(link)
 	if os.Symlink(target, link) == nil {
 		return Symlink
-	}
-	if makeJunction(target, link) == nil {
-		return Junction
 	}
 	return Copy
 }

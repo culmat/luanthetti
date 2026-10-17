@@ -3,6 +3,7 @@ package cli
 import (
 	"bytes"
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 	"time"
@@ -48,5 +49,17 @@ func TestParseWithin(t *testing.T) {
 		if _, err := parseWithin(bad); err == nil {
 			t.Errorf("%s accepted", bad)
 		}
+	}
+}
+
+func TestCLIDocsUpToDate(t *testing.T) {
+	var buf bytes.Buffer
+	WriteMarkdown(&buf)
+	want, err := os.ReadFile("../../docs/cli.md")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if buf.String() != string(want) {
+		t.Error("docs/cli.md is out of date; run `go run ./tools/gendocs > docs/cli.md`")
 	}
 }

@@ -45,7 +45,7 @@ installation "server"   /srv/luanti/
 
 Principles:
 
-1. **Install once, link everywhere.** A package release lives once in the library. Each registered installation gets a symlink (a junction on Windows, a copy where neither is possible) in `mods/`, `games/` or `textures/`.
+1. **Install once, link everywhere.** A package release lives once in the library. Each registered installation gets a symbolic link (a copy where links are not possible) in `mods/`, `games/` or `textures/`. Windows junctions are available on request only; see [coexistence.md](coexistence.md#windows-junctions).
 2. **Installations, not games, are the targets.** `install author/name` links into every registered installation by default, `--into` restricts it. Which games a package works in is a per-game status that Luanthetti shows and uses to pick dependencies, not an install location.
 3. **Per-world control stays in `world.mt`.** Luanthetti does not reinvent it; luma's roadmap covers editing it.
 4. **Interoperable by construction.** Luanthetti writes `author`, `name`, `release` (and `title`, `description` when absent) into the `.conf` exactly as the in-game installer does. Luanti, luma and Luanthetti recognise each other's installs. `scan` reports when another tool replaced a link with a real folder.
@@ -109,7 +109,7 @@ Pinned packages and excluded names are skipped.
 - Installations keep their normal layout; Luanti sees linked folders as regular folders.
 - The in-game ContentDB tab shows a linked package as installed, with its release, and can update it. Luanthetti's `scan` then shows the folder as `replaced`, and `repair --readopt` brings it back into the library.
 - `scan` lists what is in an installation: `managed`, `adoptable` (has `author` and `release`), `git` (a checkout, left alone), `unmanaged` (no ContentDB identity, left alone), `broken_link`, `replaced`.
-- Where symlinks are not possible, links degrade to copies and are recorded as such.
+- Where symlinks are not possible, links degrade to copies and are recorded as such. [coexistence.md](coexistence.md) covers what happens when another tool updates a linked package.
 - For servers started from a script, `luanthetti env <inst>` prints `LUANTI_MOD_PATH` lines that expose the library without any links.
 
 ## Relation to other tools

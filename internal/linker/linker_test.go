@@ -38,6 +38,9 @@ func TestLinkReplaceUnlink(t *testing.T) {
 			if mode != Auto && kind != mode {
 				t.Errorf("kind %s", kind)
 			}
+			if mode == Auto && kind == Junction {
+				t.Error("auto mode must never pick a junction")
+			}
 			if b, _ := os.ReadFile(filepath.Join(path, "init.lua")); string(b) != "one" {
 				t.Fatalf("content %q", b)
 			}

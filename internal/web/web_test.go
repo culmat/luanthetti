@@ -207,7 +207,7 @@ func TestAPIFlow(t *testing.T) {
 	if code, _, _ := call(t, s, hs, "GET", "/api/packages/no/such", nil); code != 404 {
 		t.Errorf("404: %d", code)
 	}
-	code, out, _ = call(t, s, hs, "GET", "/api/updates", nil)
+	code, _, _ = call(t, s, hs, "GET", "/api/updates", nil)
 	if code != 200 {
 		t.Errorf("updates %d", code)
 	}
