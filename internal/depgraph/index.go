@@ -55,6 +55,10 @@ type Index struct {
 	independent         map[int64]bool
 
 	HasRefs bool // the snapshot has the mod/ref tables (static analysis)
+	// UsePrecomputed makes Compat and Resolve return the snapshot's precomputed rows when
+	// present. Tests turn it off to exercise the port.
+	UsePrecomputed bool
+	pre            *precomputed
 }
 
 // Open opens a snapshot read-only and loads the index.
@@ -86,6 +90,7 @@ func Load(conn *sql.DB) (*Index, error) {
 		declaredUnsupported: map[int64]map[int64]bool{},
 		supportsAll:         map[int64]bool{},
 		independent:         map[int64]bool{},
+		UsePrecomputed:      true,
 	}
 	rows, err := conn.Query("SELECT id, author, name, type, title, score, downloads FROM package ORDER BY id")
 	if err != nil {
@@ -198,6 +203,9 @@ func Load(conn *sql.DB) (*Index, error) {
 		return nil, err
 	}
 	idx.HasRefs = idx.hasTable("ref") && idx.hasTable("mod")
+	if err := idx.loadPrecomputed(); err != nil {
+		return nil, err
+	}
 	return idx, nil
 }
 

@@ -113,8 +113,22 @@ func (idx *Index) Compat(t Target, games []*Pkg, refs []Ref) ([]CompatRow, error
 			return nil, err
 		}
 	}
+	var pkg *Pkg
+	if !t.IsLocal() {
+		pkg, _ = idx.Package(t.Key)
+	}
 	rows := make([]CompatRow, 0, len(games))
 	for _, game := range games {
+		if pkg != nil {
+			if row, ok := idx.PrecomputedCompat(pkg, game); ok {
+				if c, ok := claims[game.ID]; ok {
+					cc := c
+					row.ContentDBSays = &cc
+				}
+				rows = append(rows, row)
+				continue
+			}
+		}
 		res := NewResolver(idx, game).Resolve(t)
 		risky := riskyRefs(refs, idx.availableAfter(game, t, res))
 		status := "ok"

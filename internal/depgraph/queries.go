@@ -70,13 +70,18 @@ func (idx *Index) ProvidersReport(modname string) ProvidersReport {
 
 // Resolve is ldg's `resolve`: the target in the named game.
 func (idx *Index) Resolve(spec, game string) (*Resolution, error) {
-	t, _, err := idx.TargetFor(spec)
+	t, pkg, err := idx.TargetFor(spec)
 	if err != nil {
 		return nil, err
 	}
 	g, err := idx.Game(game)
 	if err != nil {
 		return nil, err
+	}
+	if pkg != nil {
+		if res, ok := idx.PrecomputedResolution(pkg, g); ok {
+			return res, nil
+		}
 	}
 	return NewResolver(idx, g).Resolve(t), nil
 }

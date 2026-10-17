@@ -23,4 +23,6 @@ jobs:
       - name: Conformance against the live snapshot
         env:
           LDG_GOLDEN: "1"
-        run: go test -run 'Conformance|Golden' -v ./internal/depgraph
+        run: |
+          export LUANTHETTI_SNAPSHOT_FILE="$(ldg info --json | python3 -c 'import json,sys; print(json.load(sys.stdin)["path"])')"
+          go test -run 'Conformance|Golden' -v ./internal/depgraph
