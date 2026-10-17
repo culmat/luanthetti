@@ -1,0 +1,26 @@
+# Compare the Go depgraph port with the real nightly ldg snapshot (every precomputed row)
+# and with `ldg --json` itself, so a rule change in luanti-depgraph shows up within a day.
+name: Depgraph conformance
+on:
+  schedule:
+    - cron: "41 5 * * *"
+  workflow_dispatch:
+
+jobs:
+  conformance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+      - uses: astral-sh/setup-uv@v10.3.0
+      - name: Install ldg and download the snapshot
+        run: |
+          uv tool install 'git+https://github.com/culmat/luanti-depgraph'
+          ldg update
+          ldg info --json
+      - name: Conformance against the live snapshot
+        env:
+          LDG_GOLDEN: "1"
+        run: go test -run 'Conformance|Golden' -v ./internal/depgraph

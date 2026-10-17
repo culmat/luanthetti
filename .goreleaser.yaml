@@ -1,0 +1,38 @@
+version: 2
+
+project_name: luanthetti
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: ./cmd/luanthetti
+    env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.ShortCommit}} -X main.date={{.Date}}
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: SHA256SUMS
+
+changelog:
+  use: github-native
+
+release:
+  draft: false
+  prerelease: auto
+
+# brews (culmat/homebrew-tap), scoops (culmat/scoop-bucket) and nfpms are added
+# together with the first approved release; they need the tap/bucket repos and tokens.
