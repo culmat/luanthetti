@@ -20,7 +20,7 @@ desktop:
 $ luanthetti search --tag technology --updated-within 6m --compatible-with desktop
 ```
 
-**Status: work in progress.** Nothing is released yet; the command line and file layout may still change before 0.1.0. Build it with Go 1.26 or newer (see Install).
+**Status: work in progress.** Nothing is released yet; the command line and file layout may still change before 0.1.0. See [Install](#install) to build it.
 
 ## Why
 
@@ -43,9 +43,29 @@ Luanthetti complements [luma](https://github.com/luanti-org/luma), the official 
 
 ## Install
 
-Download the archive for your platform from the [releases page](https://github.com/culmat/luanthetti/releases), extract it, and put `luanthetti` somewhere on your `PATH`. Builds exist for Linux, macOS and Windows on amd64 and arm64. Each release ships `SHA256SUMS`.
+There is no release yet, so build it from source. You need Git and [Go](https://go.dev/dl/) 1.26 or newer; `go version` tells you which one you have.
 
-With Go 1.26 or newer: `go install github.com/culmat/luanthetti/cmd/luanthetti@latest`.
+```sh
+git clone https://github.com/culmat/luanthetti
+cd luanthetti
+go build -o ~/.local/bin/luanthetti ./cmd/luanthetti
+luanthetti version
+```
+
+`go build -o` writes the program wherever you point it. Pick a folder that is on your `PATH` (`echo $PATH` lists them); `~/.local/bin` is one on most Linux and macOS setups. On Windows, build `luanthetti.exe` into a folder on your `PATH`.
+
+To update, run `git pull` in the checkout and the same `go build` line again.
+
+Once releases exist, the [releases page](https://github.com/culmat/luanthetti/releases) will have ready-made programs for Linux, macOS and Windows.
+
+### First steps
+
+```sh
+luanthetti installs detect        # which Luanti installations are on this machine
+luanthetti installs detect --add  # register them
+luanthetti search pipeworks
+luanthetti ui                     # or use the web UI
+```
 
 See [docs/cli.md](docs/cli.md) for every command and flag, and [docs/concept.md](docs/concept.md) for the design.
 
@@ -67,11 +87,23 @@ The client identifies itself (`luanthetti/<version> (+https://github.com/culmat/
 
 ## Contributing
 
+Work in a checkout as described under Install. Before you commit, run these from the checkout's root folder:
+
 ```sh
-go build ./... && go vet ./... && go test ./...
+go vet ./...                                         # compiler checks
+go test ./...                                        # all tests; they never touch your real Luanti folders
+go run honnef.co/go/tools/cmd/staticcheck@latest ./...   # lint
 ```
 
-See [AGENTS.md](AGENTS.md) for conventions. This project is developed with AI assistance, reviewed by a human maintainer. Part of [avanti-luanti](https://github.com/culmat/avanti-luanti).
+If you changed a command or a flag, regenerate the command reference; a test fails while it is out of date:
+
+```sh
+go run ./tools/gendocs > docs/cli.md
+```
+
+To try a change without installing it, run `go run ./cmd/luanthetti <command>`, for example `go run ./cmd/luanthetti --home /tmp/lt-test doctor`. `--home` keeps its data apart from your normal Luanthetti data.
+
+[AGENTS.md](AGENTS.md) lists the conventions and how the dependency-rule tests work. This project is developed with AI assistance, reviewed by a human maintainer. Part of [avanti-luanti](https://github.com/culmat/avanti-luanti).
 
 ## License
 
