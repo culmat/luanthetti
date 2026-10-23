@@ -43,7 +43,47 @@ Luanthetti complements [luma](https://github.com/luanti-org/luma), the official 
 
 ## Install
 
-There is no release yet, so build it from source. You need Git and [Go](https://go.dev/dl/) 1.26 or newer; `go version` tells you which one you have.
+Install a release, or build from source. Either way you get one program, `luanthetti`, with nothing else to install.
+
+### From a release
+
+1. Open the [releases page](https://github.com/culmat/luanthetti/releases) and download the archive for your system:
+
+   | System | Archive |
+   |---|---|
+   | macOS, Apple silicon | `luanthetti_<version>_darwin_arm64.tar.gz` |
+   | macOS, Intel | `luanthetti_<version>_darwin_amd64.tar.gz` |
+   | Linux, x86-64 | `luanthetti_<version>_linux_amd64.tar.gz` |
+   | Linux, ARM64 | `luanthetti_<version>_linux_arm64.tar.gz` |
+   | Windows | `luanthetti_<version>_windows_amd64.zip` (or `_arm64.zip`) |
+
+2. Optionally, check the download against `SHA256SUMS` from the same page:
+
+   ```sh
+   shasum -a 256 -c SHA256SUMS --ignore-missing     # macOS
+   sha256sum -c SHA256SUMS --ignore-missing         # Linux
+   ```
+
+3. Extract the archive and move `luanthetti` (`luanthetti.exe` on Windows) into a folder on your `PATH`. On macOS and Linux:
+
+   ```sh
+   tar -xzf luanthetti_*.tar.gz luanthetti
+   mkdir -p ~/.local/bin && mv luanthetti ~/.local/bin/
+   ```
+
+   `echo $PATH` lists the folders on your `PATH`. If `~/.local/bin` is not among them, add `export PATH="$HOME/.local/bin:$PATH"` to your shell profile (`~/.zshrc` or `~/.bashrc`).
+
+   On Windows, extract the zip and put `luanthetti.exe` in a folder listed in your `Path` environment variable.
+
+4. Check it: `luanthetti version`.
+
+The programs are not signed. macOS may refuse to open one downloaded with a browser; `xattr -d com.apple.quarantine ~/.local/bin/luanthetti` allows it. Windows may show a SmartScreen warning.
+
+To update, download the new release and replace the program.
+
+### From source
+
+You need Git and [Go](https://go.dev/dl/) 1.26 or newer; `go version` tells you which one you have.
 
 ```sh
 git clone https://github.com/culmat/luanthetti
@@ -52,11 +92,9 @@ go build -o ~/.local/bin/luanthetti ./cmd/luanthetti
 luanthetti version
 ```
 
-`go build -o` writes the program wherever you point it. Pick a folder that is on your `PATH` (`echo $PATH` lists them); `~/.local/bin` is one on most Linux and macOS setups. On Windows, build `luanthetti.exe` into a folder on your `PATH`.
+`go build -o` writes the program wherever you point it; use a folder on your `PATH`, as above. On Windows, build `luanthetti.exe` into a folder in your `Path`. A program built this way reports its version as `dev` plus the git commit.
 
 To update, run `git pull` in the checkout and the same `go build` line again.
-
-Once releases exist, the [releases page](https://github.com/culmat/luanthetti/releases) will have ready-made programs for Linux, macOS and Windows.
 
 ### First steps
 
